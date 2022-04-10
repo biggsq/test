@@ -1,0 +1,338 @@
+<aura:component controller="ENewController" implements="forceCommunity:availableForAllPageTypes" access="global">
+<aura:handler name="init" action="{!c.doInit}" value="{!this}" />
+<ltng:require styles="{! $Resource.bootstrap + '/bootstrap-3.3.7-dist/css/bootstrap.css'}" 
+scripts="{!join(',', 
+$Resource.jquery , 
+$Resource.bootstrap + '/bootstrap-3.3.7-dist/js/bootstrap.js',$Resource.bootstrap + '/bootstrap-3.3.7-dist/js/bootstrap.min.js')
+}" afterScriptsLoaded="{!c.scriptsLoaded}"/>
+<aura:attribute name="newHouseItem" type="New_Houses__c[]" access="global"/>
+<aura:attribute name="currentpage" type="Integer" default="1"/>
+<aura:attribute name="totalpage" type="Integer" />
+<aura:attribute name="totalpages" type="Integer[]" />
+<aura:attribute name="isLoading" type="String" />
+<!-- 查询属性 -->
+<aura:attribute name="area" type="String" default="unlimited"/>
+<aura:attribute name="subway" type="String" default="unlimited"/>
+<aura:attribute name="price" type="String" default="unlimited"/>
+<aura:attribute name="layout" type="String" default="unlimited"/>
+<aura:attribute name="type" type="String" default="unlimited"/>
+<aura:attribute name="feature" type="String" default="unlimited"/>
+<aura:attribute name="name" type="String" default=""/>
+<style>
+.pagebutton1{
+	margin-left: 0;
+	border-top-left-radius: 4px;
+	border-bottom-left-radius: 4px;
+	border-top-right-radius: 0px;
+	border-bottom-right-radius: 0px;
+	padding:6px 12px;
+}
+.pagebutton2{
+	margin-left: 0;
+	border-top-left-radius: 0px;
+	border-bottom-left-radius: 0px;
+	border-top-right-radius: 4px;
+	border-bottom-right-radius: 4px;
+	border-left: 0px;
+	padding:6px 12px;
+}
+.pagebutton2:focus {
+	border-color: rgb(216, 221, 230);
+}
+.pagebutton3{
+	margin-left: 0;
+	padding:6px 12px;
+	border-radius: 0px;
+	border-left: 0px;
+}
+.slds-button:focus {
+	outline: 0;
+	box-shadow: 0 0 0px #0070d2;
+}
+.col-center-block {  
+	float: none;  
+	display: block;  
+	margin-left:auto;
+	margin-right:auto;    
+}
+.tab-border{
+	padding: 5px 0px;
+	padding-top:10px;
+}
+.border-xuxian{
+	border-bottom: 1px dashed #ddd;
+}
+.nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
+	color: #f60;
+	cursor: default;
+	background-color: #fff;
+	border: 1px solid #ddd;
+	border-bottom-color: transparent;
+}
+.a-black{
+	color:black;
+	
+}
+.a-black:hover{
+	color:black;
+}
+.a-black:focus{
+	color: #f60;
+}
+/*+是兄弟选择器选中后 span状态 >是子选择*/
+.radio-checked:checked+span { 
+	color: #f60;
+	font-weight: 900;
+}
+.radio-label{
+	padding-left: 10px;
+}
+.search::-webkit-input-placeholder{
+    font-size: 14px;
+}
+</style>
+<div class="row" >
+	<div class="container " style="padding-top: 30px" >
+		<div class="col-md-5 col-md-offset-1">
+		<h1  style="color:#449d44"><b>Efrog Recommends</b></h1>
+	    </div>
+		<div class="col-md-5">
+			<div class="input-group" style="margin-top:20px;margin-bottom: 10px">
+				<input id="searchbyname" type="text" class="form-control search" placeholder="Search by Name" />
+				<span class="input-group-btn">
+					<button class="btn btn-success" type="button" onclick="{!c.searchByName}"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
+				</span>
+			</div>
+		</div>
+		<div class="col-xs-12 col-sm-12 col-md-10 col-lg-10 col-center-block" >
+			<div class="col-xs-12 col-sm-12 col-md-12" style="border:1px solid #dddbda; padding:15px; margin-top:20px;margin-bottom: 20px; ">
+				<span style="float:left;margin-top:15px">位置：</span>
+				<div class=" col-md-11"  style="padding-left: 0px;padding-right: 0px">
+					<ul id="myTabs" class="nav nav-tabs" role="tablist">
+						<li role="presentation" class="active"><a href="#home" class="a-black" id="home-tab" role="tab" data-toggle="tab" aria-controls="home" aria-expanded="true" style="padding:10px"><span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>&nbsp;By Area</a></li>
+						<li role="presentation" ><a href="#profile" class="a-black" role="tab" id="profile-tab" data-toggle="tab" aria-controls="profile" style="padding:10px"><span class="glyphicon glyphicon-road" aria-hidden="true"></span>&nbsp;By Subway</a></li>
+					</ul>
+					<div id="myTabContent " class="tab-content tab-border border-xuxian" >
+						<div role="tabpanel" class="tab-pane fade in active" id="home" aria-labelledby="home-tab">
+							<label class="radio-inline radio-label">
+								<input type="radio" name="areaRadio" checked="true" value="unlimited" class="radio-checked" style="display: none" /> <span>不限</span>
+							</label>
+							<label class="radio-inline radio-label">
+								<input type="radio" name="areaRadio"  value="浦东" class="radio-checked" style="display: none" /> <span>浦东</span>
+							</label>
+							<label class="radio-inline radio-label">
+								<input type="radio" name="areaRadio"  value="松江" class="radio-checked" style="display: none" /> <span>松江</span>
+							</label>
+							<label class="radio-inline radio-label">
+								<input type="radio" name="areaRadio"  value="嘉定" class="radio-checked" style="display: none" /> <span>嘉定</span>
+							</label>
+							<label class="radio-inline radio-label">
+								<input type="radio" name="areaRadio"  value="青浦" class="radio-checked" style="display: none" /> <span>青浦</span>
+							</label>
+							<label class="radio-inline radio-label">
+								<input type="radio" name="areaRadio"  value="闵行" class="radio-checked" style="display: none" /> <span>闵行</span>
+							</label>
+							<label class="radio-inline radio-label">
+								<input type="radio" name="areaRadio"  value="奉贤" class="radio-checked" style="display: none" /> <span>奉贤</span>
+							</label>
+							<label class="radio-inline radio-label">
+								<input type="radio" name="areaRadio"  value="宝山" class="radio-checked" style="display: none" /> <span>宝山</span>
+							</label>
+							<label class="radio-inline radio-label">
+								<input type="radio" name="areaRadio"  value="静安" class="radio-checked" style="display: none" /> <span>静安</span>
+							</label>
+							<label class="radio-inline radio-label">
+								<input type="radio" name="areaRadio"  value="杨浦" class="radio-checked" style="display: none" /> <span>杨浦</span>
+							</label>
+							<label class="radio-inline radio-label">
+								<input type="radio" name="areaRadio"  value="普陀" class="radio-checked" style="display: none" /> <span>普陀</span>
+							</label>
+							<label class="radio-inline radio-label">
+								<input type="radio" name="areaRadio"  value="黄浦" class="radio-checked" style="display: none" /> <span>黄浦</span>
+							</label>
+							<label class="radio-inline radio-label">
+								<input type="radio" name="areaRadio"  value="徐汇" class="radio-checked" style="display: none" /> <span>徐汇</span>
+							</label>
+							<label class="radio-inline radio-label">
+								<input type="radio" name="areaRadio"  value="长宁" class="radio-checked" style="display: none" /> <span>长宁</span>
+							</label>
+							<label class="radio-inline radio-label">
+								<input type="radio" name="areaRadio"  value="虹口" class="radio-checked" style="display: none" /> <span>虹口</span>
+							</label>
+							<label class="radio-inline radio-label">
+								<input type="radio" name="areaRadio"  value="金山" class="radio-checked" style="display: none" /> <span>金山</span>
+							</label>
+						</div>
+						<div role="tabpanel" class="tab-pane fade" id="profile" aria-labelledby="profile-tab">
+							<label class="radio-inline radio-label">
+								<input type="radio" name="subwayRadio"  value="subway1" class="radio-checked" style="display: none" /> <span>1号线</span>
+							</label>
+							<label class="radio-inline radio-label">
+								<input type="radio" name="subwayRadio"  value="subway2" class="radio-checked" style="display: none" /> <span>2号线</span>
+							</label>
+							<label class="radio-inline radio-label">
+								<input type="radio" name="subwayRadio"  value="subway3" class="radio-checked" style="display: none" /> <span>3号线</span>
+							</label>
+							<label class="radio-inline radio-label">
+								<input type="radio" name="subwayRadio"  value="subway4" class="radio-checked" style="display: none" /> <span>4号线</span>
+							</label>
+							<label class="radio-inline radio-label">
+								<input type="radio" name="subwayRadio"  value="subway5" class="radio-checked" style="display: none" /> <span>5号线</span>
+							</label>
+							<label class="radio-inline radio-label">
+								<input type="radio" name="subwayRadio"  value="subway6" class="radio-checked" style="display: none" /> <span>6号线</span>
+							</label>
+							<label class="radio-inline radio-label">
+								<input type="radio" name="subwayRadio"  value="subway7" class="radio-checked" style="display: none" /> <span>7号线</span>
+							</label>
+							<label class="radio-inline radio-label">
+								<input type="radio" name="subwayRadio"  value="subway8" class="radio-checked" style="display: none" /> <span>8号线</span>
+							</label>
+							<label class="radio-inline radio-label">
+								<input type="radio" name="subwayRadio"  value="subway9" class="radio-checked" style="display: none" /> <span>9号线</span>
+							</label>
+							<label class="radio-inline radio-label">
+								<input type="radio" name="subwayRadio"  value="subway11" class="radio-checked" style="display: none" /> <span>11号线</span>
+							</label>
+							<label class="radio-inline radio-label">
+								<input type="radio" name="subwayRadio"  value="subway16" class="radio-checked" style="display: none" /> <span>16号线</span>
+							</label>
+						</div>
+					</div>
+				</div>
+				<span style="float:left;margin-top:15px">单价：</span>
+				<div class=" col-md-11 border-xuxian " style="padding:15px 0px 5px 0px" >
+					<label class="radio-inline radio-label">
+						<input type="radio" name="priceRadio" checked="true" value="unlimited" class="radio-checked" style="display: none" /> <span>不限</span>
+					</label>
+					<label class="radio-inline radio-label">
+						<input type="radio" name="priceRadio"  value="price0" class="radio-checked" style="display: none" /> <span>1万以下</span>
+					</label>
+					<label class="radio-inline radio-label">
+						<input type="radio" name="priceRadio"  value="price1" class="radio-checked" style="display: none" /> <span>1-2万</span>
+					</label>
+					<label class="radio-inline radio-label">
+						<input type="radio" name="priceRadio"  value="price2" class="radio-checked" style="display: none" /> <span>2-3万</span>
+					</label>
+					<label class="radio-inline radio-label">
+						<input type="radio" name="priceRadio"  value="price3" class="radio-checked" style="display: none" /> <span>3-4万</span>
+					</label>
+					<label class="radio-inline radio-label">
+						<input type="radio" name="priceRadio"  value="price4" class="radio-checked" style="display: none" /> <span>4-5万</span>
+					</label>
+					<label class="radio-inline radio-label">
+						<input type="radio" name="priceRadio"  value="price5" class="radio-checked" style="display: none" /> <span>5万以上</span>
+					</label>
+				</div>
+				<span style="float:left;margin-top:15px">户型：</span>
+				<div class=" col-md-11 border-xuxian " style="padding:15px 0px 5px 0px" >
+					<label class="radio-inline radio-label">
+						<input type="radio" name="layoutRadio" checked="true" value="unlimited" class="radio-checked" style="display: none" /> <span>不限</span>
+					</label>
+					<label class="radio-inline radio-label">
+						<input type="radio" name="layoutRadio"  value="1室" class="radio-checked" style="display: none" /> <span>1室</span>
+					</label>
+					<label class="radio-inline radio-label">
+						<input type="radio" name="layoutRadio"  value="2室" class="radio-checked" style="display: none" /> <span>2室</span>
+					</label>
+					<label class="radio-inline radio-label">
+						<input type="radio" name="layoutRadio"  value="3室" class="radio-checked" style="display: none" /> <span>3室</span>
+					</label>
+					<label class="radio-inline radio-label">
+						<input type="radio" name="layoutRadio"  value="4室" class="radio-checked" style="display: none" /> <span>4室</span>
+					</label>
+					<label class="radio-inline radio-label">
+						<input type="radio" name="layoutRadio"  value="5室" class="radio-checked" style="display: none" /> <span>5室</span>
+					</label>
+				</div>
+				<span style="float:left;margin-top:15px">类型：</span>
+				<div class=" col-md-11 border-xuxian " style="padding:15px 0px 5px 0px" >
+					<label class="radio-inline radio-label">
+						<input type="radio" name="typeRadio" checked="true" value="unlimited" class="radio-checked" style="display: none" /> <span>不限</span>
+					</label>
+					<label class="radio-inline radio-label">
+						<input type="radio" name="typeRadio"  value="住宅" class="radio-checked" style="display: none" /> <span>住宅</span>
+					</label>
+					<label class="radio-inline radio-label">
+						<input type="radio" name="typeRadio"  value="别墅" class="radio-checked" style="display: none" /> <span>别墅</span>
+					</label>
+					<label class="radio-inline radio-label">
+						<input type="radio" name="typeRadio"  value="办公楼" class="radio-checked" style="display: none" /> <span>办公楼</span>
+					</label>
+					<label class="radio-inline radio-label">
+						<input type="radio" name="typeRadio"  value="店铺" class="radio-checked" style="display: none" /> <span>店铺</span>
+					</label>
+				</div>
+				<span style="float:left;margin-top:15px">特色：</span>
+				<div class=" col-md-11 border-xuxian " style="padding:15px 0px 5px 0px" >
+					<label class="radio-inline radio-label">
+						<input type="radio" name="featureRadio" checked="true" value="unlimited" class="radio-checked" style="display: none" /> <span>不限</span>
+					</label>
+					<label class="radio-inline radio-label">
+						<input type="radio" name="featureRadio"  value="新开盘" class="radio-checked" style="display: none" /> <span>新开盘</span>
+					</label>
+					<label class="radio-inline radio-label">
+						<input type="radio" name="featureRadio"  value="刚需房" class="radio-checked" style="display: none" /> <span>刚需房</span>
+					</label>
+					<label class="radio-inline radio-label">
+						<input type="radio" name="featureRadio"  value="大型社区" class="radio-checked" style="display: none" /> <span>大型社区</span>
+					</label>
+					<label class="radio-inline radio-label">
+						<input type="radio" name="featureRadio"  value="学校" class="radio-checked" style="display: none" /> <span>学校</span>
+					</label>
+					<label class="radio-inline radio-label">
+						<input type="radio" name="featureRadio"  value="商场" class="radio-checked" style="display: none" /> <span>商场</span>
+					</label>
+					<label class="radio-inline radio-label">
+						<input type="radio" name="featureRadio"  value="低总价" class="radio-checked" style="display: none" /> <span>低总价</span>
+					</label>
+				</div>
+				<div  class="col-md-12" align="center" style="padding-top: 15px">
+					<button type="button" class="btn btn-success" style="padding:6px 20px;margin-right:10px " onclick="{!c.searchByselect}">搜索</button>
+					<button type="button" class="btn btn-default" style="padding:6px 20px;margin-left:10px " onclick="{!c.reset}" >重置</button>
+				</div>							
+			</div>
+		</div>
+		<aura:iteration items="{!v.newHouseItem}" var="hou">
+		<div class="col-xs-12 col-sm-12 col-md-10 col-lg-10 col-center-block" >
+			<c:EfrogNewhousesItem newHouse="{!hou}" />
+		</div>
+	</aura:iteration>
+
+</div>
+</div>
+<!-- <div  class="slds-grid slds-grid_align-center" style="margin-bottom: 50px">
+	 <div>
+		<lightning:button label="Previous"  onclick="{!c.previous}" class="pagebutton1 "  disabled="{!v.currentpage==1}" />
+	</div>
+	<div>
+		<lightning:button label="1" onclick="{!c.onepage}"  class="pagebutton3 " disabled="{!v.currentpage==1}" />
+	</div>
+	<aura:iteration items="{!v.totalpages}" var="tot">
+	<div>
+		<lightning:button label="{!tot}" onclick="{!c.onepage}"  class="pagebutton3 " disabled="{!v.currentpage==tot}" />
+	</div>
+</aura:iteration>
+<div>
+	<lightning:button label="{!v.totalpage}" onclick="{!c.onepage}"  class="pagebutton3 " disabled="{!v.currentpage==v.totalpage}" />
+</div>
+<div> 
+	<lightning:button label="Next" onclick="{!c.next}" class="pagebutton2 " disabled="{!v.currentpage==v.totalpage}" /> 
+</div> 
+</div> -->
+<div align="center" style="margin-bottom:50px;" class="form-inline">
+	<div class="form-group">
+		<button type="button" class="btn btn-default" onclick="{!c.changePage}" disabled="{!v.currentpage==1}" value="Previous">Previous</button>
+		Page&nbsp;<input id="currentpage" class="form-control" value="{!v.currentpage}" style="width: 30px;padding-left: 5px;padding-right: 5px;" onchange="{!c.writePage}" />&nbsp;of&nbsp;{!v.totalpage}&nbsp;
+		<button type="button" class="btn btn-default" onclick="{!c.changePage}" disabled="{!v.currentpage==v.totalpage}" value="Next" >Next</button>
+	</div>
+</div>
+<!-- loading -->
+<aura:if isTrue="{!v.isLoading}">
+<div style="position:fixed;left:45%;top:40%;margin-left:width/2;margin-top:height/2; ">
+	<img src="{!$Resource.loading}" />
+</div>
+<div class="slds-backdrop slds-backdrop--open"></div>
+<!--###### MODAL BOX Part END Here ######-->   
+</aura:if> 
+</aura:component>

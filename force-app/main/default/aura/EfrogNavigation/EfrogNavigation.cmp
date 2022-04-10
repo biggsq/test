@@ -1,0 +1,242 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes">
+<ltng:require styles="{! $Resource.bootstrap + '/bootstrap-3.3.7-dist/css/bootstrap.css'}" 
+scripts="{!join(',', 
+$Resource.jquery , 
+$Resource.bootstrap + '/bootstrap-3.3.7-dist/js/bootstrap.js',$Resource.bootstrap + '/bootstrap-3.3.7-dist/js/bootstrap.min.js')
+}" afterScriptsLoaded="{!c.scriptsLoaded}"/>
+<aura:handler name="init" action="{!c.doInit}" value="{!this}" />
+<aura:attribute name="username" type="String" default="Login" />
+<aura:attribute name="Home" type="String" />
+<aura:attribute name="New_Houses" type="String" />
+<aura:attribute name="Hand_Houses" type="String" />
+<aura:attribute name="Rent_Houses" type="String" />
+<aura:attribute name="Agents" type="String" />
+<aura:attribute name="jh" type="String"  />
+<aura:attribute name="jdiv" type="String"  default="display: none;"/>
+<aura:attribute name="imageName" type="String"/>
+<style>
+/*.jumbotron{
+  background:url({!$Resource.screen}) no-repeat;
+background-size:100% 100%;
+}*/
+.nav-p-right{
+font-family: Roboto-Medium; 
+font-size:15px;
+font-weight: 700;
+}
+.float-header { 
+background:rgba(0,0,0,0);
+-webkit-transition: background 1s ease-in-out;  /*渐入 从透明到显示 .anim_fade_image:hover,css鼠标经过样式,webkit-transition渐变的属性 1秒 以慢速开始加快 不然匀速*/
+}
+.float-header-in{
+background:rgba(0,0,0,0.7);
+}
+#a-no-background a:hover {
+    background-color: rgba(0,0,0,0);
+    color:white; 
+}
+.navbar-default {
+     border:0px;
+}
+.navbar-default .navbar-nav > li > a {
+    color: #b3b3b3;
+}
+</style> 
+<nav  class="navbar navbar-fixed-top  navbar-without-shadow float-header navbar-default" role="navigation" style="padding-top: 15px;margin-bottom: 0px">
+    <div class="container">
+      <div class="navbar-header ">
+	      <button type="button" class="navbar-toggle collapsed " data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+	        <span class="sr-only">Toggle navigation</span>
+	        <span class="icon-bar"></span>
+	        <span class="icon-bar"></span>
+	        <span class="icon-bar"></span>
+	      </button>
+          <div class="navbar-brand" style="padding:0px 15px;margin-bottom:15px">
+              <img src="{!$Resource.testw}" class="navbar-brand__img" alt="" style="width:100px"/>            
+          </div>
+        </div>
+      <div class=" navbar-collapse collapse " id="navbar">
+        <ul class="nav navbar-nav navbar-right" >
+          <li id="a-no-background"><a class="nav-p-right" data-track-location='header' href="../c/Efrog.app" style="{!v.Home}">Home</a></li>
+          <li id="a-no-background"><a class="nav-p-right " data-track-location='header' href="../c/EfrogNewhouses.app" style="{!v.New_Houses}">New Houses</a></li>
+          <li id="a-no-background"><a class="nav-p-right" data-track-location='header' href="" style="{!v.Hand_Houses}">Hand Houses</a></li>
+          <li id="a-no-background"><a class="nav-p-right" data-track-location='header' href="" style="{!v.Rent_Houses}">Rent Houses</a></li>
+          <li id="a-no-background"><a class="nav-p-right" data-track-location='header' href="" style="{!v.Agents}">Agents</a></li>
+          <li style="padding-top:10px; margin-left: 10px"><a  class="btn btn-success btn-lg" href="#" role="button" style="padding: 5px 25px;color: white" >{!v.username}</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+<div class="jumbotron header-inner" style="{! 'margin-bottom: 0px; background: url('+$Resource.image + '/image/'+v.imageName+') no-repeat; background-size:100% 100%;'}"  ><!-- style="margin-bottom: 0px; background: url(../resource/1517213693000/screen) no-repeat; background-size:100% 100%; " -->
+  <div class="container" style="margin-top: 50px; margin-bottom: 50px" align="center">
+    <h1 style="color:white">{!v.jh}</h1>
+    <div style="{!v.jdiv}">
+    <p style="color:white">...</p>
+    <p style="color:white">...</p>
+    <p style="color:white">...</p>
+    <p style="color:white">...</p>
+    <p style="color:white">...</p>
+    <p><a class="btn btn-success btn-lg" href="#" role="button">Get Started</a></p>
+  </div>
+  </div>
+</div>
+<!-- 	 <div>
+  <div class="slds-context-bar">
+    <div class="slds-context-bar__primary">
+      <div class="slds-context-bar__item slds-context-bar__dropdown-trigger slds-dropdown-trigger slds-dropdown-trigger_click slds-no-hover">
+        <div class="slds-context-bar__icon-action">
+          <button class="slds-button slds-icon-waffle_container slds-context-bar__button" title="Description of the icon when needed">
+            <span class="slds-icon-waffle">
+              <span class="slds-r1"></span>
+              <span class="slds-r2"></span>
+              <span class="slds-r3"></span>
+              <span class="slds-r4"></span>
+              <span class="slds-r5"></span>
+              <span class="slds-r6"></span>
+              <span class="slds-r7"></span>
+              <span class="slds-r8"></span>
+              <span class="slds-r9"></span>
+            </span>
+          </button>
+        </div>
+        <span class="slds-context-bar__label-action slds-context-bar__app-name">
+          <span class="slds-truncate" title="App Name">Efrog</span>
+        </span>
+      </div>
+    </div>
+    <nav class="slds-context-bar__secondary" role="navigation">
+      <ul class="slds-grid">
+        <li class="slds-context-bar__item slds-is-active">
+          <a href="javascript:void(0);" class="slds-context-bar__label-action" title="Home">
+            <span class="slds-assistive-text">Current Page:</span>
+            <span class="slds-truncate" title="Home">Home</span>
+          </a>
+        </li>
+        <li class="slds-context-bar__item slds-context-bar__dropdown-trigger slds-dropdown-trigger slds-dropdown-trigger_hover">
+          <a href="javascript:void(0);" class="slds-context-bar__label-action" title="New Houses">
+            <span class="slds-truncate" title="New Houses">New Houses</span>
+          </a>
+          <div class="slds-dropdown slds-dropdown_left">
+            <ul class="slds-dropdown__list" role="menu">
+               <li class="slds-dropdown__item" role="presentation">
+                <a href="javascript:void(0);" role="menuitem" tabindex="-1">
+                	<p style="color:#666;font-size:16px;">
+                    <b>区域找房&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></p>
+                </a>
+              </li>
+              <li class="slds-dropdown__item" role="presentation">
+                <a href="javascript:void(0);" role="menuitem" tabindex="-1">
+                  <p style="color:#666;font-size:16px;">
+                    <b>地铁找房&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></p>
+                </a>
+              </li>  
+              <li class="slds-dropdown__header slds-has-divider_top-space" role="separator">
+              </li>
+              <li class="slds-dropdown__item" role="presentation">
+                <a href="javascript:void(0);" role="menuitem" tabindex="-1">
+                  <p style="color:#666;font-size:16px;">
+                    <b>新盘&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></p>
+                </a>
+              </li>
+              <li class="slds-dropdown__item" role="presentation">
+                <a href="javascript:void(0);" role="menuitem" tabindex="-1">
+                  <p style="color:#666;font-size:16px;">
+                    <b>楼讯&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></p>
+                </a>
+              </li>
+              <li class="slds-dropdown__item" role="presentation">
+                <a href="javascript:void(0);" role="menuitem" tabindex="-1">
+                  <p style="color:#666;font-size:16px;">
+                    <b>热门活动&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></p>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </li>
+        <li class="slds-context-bar__item slds-context-bar__dropdown-trigger slds-dropdown-trigger slds-dropdown-trigger_hover">
+          <a href="javascript:void(0);" class="slds-context-bar__label-action" title="Hand Houses">
+            <span class="slds-truncate" title="Hand Houses">Hand Houses</span>
+          </a>
+          <div class="slds-dropdown slds-dropdown_left">
+            <ul class="slds-dropdown__list" role="menu">
+               <li class="slds-dropdown__item" role="presentation">
+                <a href="javascript:void(0);" role="menuitem" tabindex="-1">
+                	<p style="color:#666;font-size:16px;">
+                    <b>区域找房&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></p>
+                </a>
+              </li>
+              <li class="slds-dropdown__item" role="presentation">
+                <a href="javascript:void(0);" role="menuitem" tabindex="-1">
+                  <p style="color:#666;font-size:16px;">
+                    <b>地铁找房&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></p>
+                </a>
+              </li>  
+              <li class="slds-dropdown__header slds-has-divider_top-space" role="separator">
+              </li>
+              <li class="slds-dropdown__item" role="presentation">
+                <a href="javascript:void(0);" role="menuitem" tabindex="-1">
+                  <p style="color:#666;font-size:16px;">
+                    <b>新盘&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></p>
+                </a>
+              </li>
+              <li class="slds-dropdown__item" role="presentation">
+                <a href="javascript:void(0);" role="menuitem" tabindex="-1">
+                  <p style="color:#666;font-size:16px;">
+                    <b>楼讯&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></p>
+                </a>
+              </li>
+              <li class="slds-dropdown__item" role="presentation">
+                <a href="javascript:void(0);" role="menuitem" tabindex="-1">
+                  <p style="color:#666;font-size:16px;">
+                    <b>热门活动&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></p>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </li>
+        <li class="slds-context-bar__item slds-context-bar__dropdown-trigger slds-dropdown-trigger slds-dropdown-trigger_hover">
+          <a href="javascript:void(0);" class="slds-context-bar__label-action" title="Renting Houses">
+            <span class="slds-truncate" title="Renting Houses">Renting Houses</span>
+          </a>
+          <div class="slds-dropdown slds-dropdown_left">
+            <ul class="slds-dropdown__list" role="menu">
+               <li class="slds-dropdown__item" role="presentation">
+                <a href="javascript:void(0);" role="menuitem" tabindex="-1">
+                	<p style="color:#666;font-size:16px;">
+                    <b>区域找房&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></p>
+                </a>
+              </li>
+              <li class="slds-dropdown__item" role="presentation">
+                <a href="javascript:void(0);" role="menuitem" tabindex="-1">
+                  <p style="color:#666;font-size:16px;">
+                    <b>地铁找房&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></p>
+                </a>
+              </li>  
+              <li class="slds-dropdown__header slds-has-divider_top-space" role="separator">
+              </li>
+              <li class="slds-dropdown__item" role="presentation">
+                <a href="javascript:void(0);" role="menuitem" tabindex="-1">
+                  <p style="color:#666;font-size:16px;">
+                    <b>新盘&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></p>
+                </a>
+              </li>
+              <li class="slds-dropdown__item" role="presentation">
+                <a href="javascript:void(0);" role="menuitem" tabindex="-1">
+                  <p style="color:#666;font-size:16px;">
+                    <b>楼讯&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></p>
+                </a>
+              </li>
+              <li class="slds-dropdown__item" role="presentation">
+                <a href="javascript:void(0);" role="menuitem" tabindex="-1">
+                  <p style="color:#666;font-size:16px;">
+                    <b>热门活动&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></p>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</div> -->
+</aura:component>

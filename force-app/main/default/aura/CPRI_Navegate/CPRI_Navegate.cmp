@@ -1,0 +1,154 @@
+<aura:component >
+<ltng:require 
+scripts="{!join(',', 
+$Resource.jquery)
+}" afterScriptsLoaded="{!c.scriptsLoaded}"/>
+<aura:handler name="init" action="{!c.doInit}" value="{!this}"/>
+<aura:attribute name="mydata" type="String[]"/>
+<aura:attribute name="mycolumns" type="List"/>
+<aura:attribute name="FileList" type="Object"/>
+<button class="slds-button">Button Base</button>
+<button class="slds-button slds-button_neutral">Button Neutral</button>
+<button class="slds-button slds-button_brand">Button Brand</button>
+<button class="slds-button slds-button_outline-brand">Button Outline Brand</button>
+<button class="slds-button slds-button_destructive">Button Destructive</button>
+<button class="slds-button slds-button_success">Button Success</button>
+
+<div class="slds-tabs_default">
+  <ul class="slds-tabs_default__nav" role="tablist">
+    <li class="slds-tabs_default__item slds-is-active" title="Item One" role="presentation">
+      <a class="slds-tabs_default__link" href="javascript:void(0);" role="tab" tabindex="0" aria-selected="true" aria-controls="tab-default-1" id="tab-default-1__item">Item One</a>
+    </li>
+    <li class="slds-tabs_default__item" title="Item Two" role="presentation">
+      <a class="slds-tabs_default__link" href="javascript:void(0);" role="tab" tabindex="-1" aria-selected="false" aria-controls="tab-default-2" id="tab-default-2__item">Item Two</a>
+    </li>
+    <li class="slds-tabs_default__item" title="Item Three" role="presentation">
+      <a class="slds-tabs_default__link" href="javascript:void(0);" role="tab" tabindex="-1" aria-selected="false" aria-controls="tab-default-3" id="tab-default-3__item">Item Three</a>
+    </li>
+  </ul>
+  <div id="tab-default-1" class="slds-tabs_default__content slds-show" role="tabpanel" aria-labelledby="tab-default-1__item">
+    <div class="slds-vertical-tabs">
+  <ul class="slds-vertical-tabs__nav" role="tablist" aria-orientation="vertical">
+    <li class="slds-vertical-tabs__nav-item slds-is-active" title="Tab 1" role="presentation"><a class="slds-vertical-tabs__link" href="javascript:void(0)" role="tab" tabindex="0" aria-selected="true" aria-controls="slds-vertical-tabs-11" id="slds-vertical-tabs-0__nav">Tab 1</a></li>
+    <li class="slds-vertical-tabs__nav-item" title="Tab 2" role="presentation"><a class="slds-vertical-tabs__link" href="javascript:void(0)" role="tab" tabindex="-1" aria-selected="false" aria-controls="slds-vertical-tabs-12" id="slds-vertical-tabs-1__nav">Tab 2</a></li>
+    <li class="slds-vertical-tabs__nav-item" title="Tab 3"
+      role="presentation"><a class="slds-vertical-tabs__link" href="javascript:void(0)" role="tab" tabindex="-1" aria-selected="false" aria-controls="slds-vertical-tabs-13" id="slds-vertical-tabs-2__nav">Tab 3</a></li>
+  </ul>
+  <div class="slds-vertical-tabs__content slds-show" id="slds-vertical-tabs-11" role="tabpanel" aria-labelledby="slds-vertical-tabs-0__nav">
+    <div class="slds-text-longform">
+      <h3 class="slds-text-heading_medium">111-111</h3>
+      <p>Content for Tab 11</p>
+      <p>Lorem ipsum dolor...</p>
+      <p>Lorem ipsum dolor...</p>
+    </div>
+  </div>
+  <div class="slds-vertical-tabs__content slds-hide" id="slds-vertical-tabs-12" role="tabpanel" aria-labelledby="slds-vertical-tabs-1__nav">
+    <div class="slds-text-longform">
+      <h3 class="slds-text-heading_medium">111-222</h3>
+      <p>Content for Tab 12</p>
+      <p>Lorem ipsum dolor...</p>
+      <p>Lorem ipsum dolor...</p>
+    </div>
+  </div>
+  <div class="slds-vertical-tabs__content slds-hide" id="slds-vertical-tabs-13" role="tabpanel" aria-labelledby="slds-vertical-tabs-2__nav">
+    <div class="slds-text-longform">
+      <h3 class="slds-text-heading_medium">111-333</h3>
+      <p>Content for Tab 13</p>
+      <p>Lorem ipsum dolor...</p>
+      <p>Lorem ipsum dolor...</p>
+    </div>
+  </div>
+</div>
+  </div>
+  <div id="tab-default-2" class="slds-tabs_default__content slds-hide" role="tabpanel" aria-labelledby="tab-default-2__item">
+  	<div class="slds-vertical-tabs">
+  <ul class="slds-vertical-tabs__nav" role="tablist" aria-orientation="vertical">
+    <li class="slds-vertical-tabs__nav-item slds-is-active" title="Tab 1" role="presentation"><a class="slds-vertical-tabs__link" href="javascript:void(0)" role="tab" tabindex="0" aria-selected="true" aria-controls="slds-vertical-tabs-21" id="slds-vertical-tabs-0__nav">Tab 1</a></li>
+    <li class="slds-vertical-tabs__nav-item" title="Tab 2" role="presentation"><a class="slds-vertical-tabs__link" href="javascript:void(0)" role="tab" tabindex="-1" aria-selected="false" aria-controls="slds-vertical-tabs-22" id="slds-vertical-tabs-1__nav">Tab 2</a></li>
+    <li class="slds-vertical-tabs__nav-item" title="Tab 3"
+      role="presentation"><a class="slds-vertical-tabs__link" href="javascript:void(0)" role="tab" tabindex="-1" aria-selected="false" aria-controls="slds-vertical-tabs-23" id="slds-vertical-tabs-2__nav">Tab 3</a></li>
+  </ul>
+  <div class="slds-vertical-tabs__content slds-show" id="slds-vertical-tabs-21" role="tabpanel" aria-labelledby="slds-vertical-tabs-0__nav">
+    <div class="slds-text-longform">
+      <h3 class="slds-text-heading_medium">222-111</h3>
+      <p>Content for Tab 21</p>
+      <p>Lorem ipsum dolor...</p>
+      <p>Lorem ipsum dolor...</p>
+    </div>
+  </div>
+  <div class="slds-vertical-tabs__content slds-hide" id="slds-vertical-tabs-22" role="tabpanel" aria-labelledby="slds-vertical-tabs-1__nav">
+    <div class="slds-text-longform">
+      <h3 class="slds-text-heading_medium">222-222</h3>
+      <p>Content for Tab 22</p>
+      <p>Lorem ipsum dolor...</p>
+      <p>Lorem ipsum dolor...</p>
+    </div>
+  </div>
+  <div class="slds-vertical-tabs__content slds-hide" id="slds-vertical-tabs-23" role="tabpanel" aria-labelledby="slds-vertical-tabs-2__nav">
+    <div class="slds-text-longform">
+      <h3 class="slds-text-heading_medium">222-333</h3>
+      <p>Content for Tab 23</p>
+      <p>Lorem ipsum dolor...</p>
+      <p>Lorem ipsum dolor...</p>
+    </div>
+  </div>
+</div>
+  </div>
+  <div id="tab-default-3" class="slds-tabs_default__content slds-hide" role="tabpanel" aria-labelledby="tab-default-3__item">
+  	<div class="slds-vertical-tabs">
+  <ul class="slds-vertical-tabs__nav" role="tablist" aria-orientation="vertical">
+    <li class="slds-vertical-tabs__nav-item slds-is-active" title="Tab 1" role="presentation"><a class="slds-vertical-tabs__link" href="javascript:void(0)" role="tab" tabindex="0" aria-selected="true" aria-controls="slds-vertical-tabs-31" id="slds-vertical-tabs-0__nav">Tab 1</a></li>
+    <li class="slds-vertical-tabs__nav-item" title="Tab 2" role="presentation"><a class="slds-vertical-tabs__link" href="javascript:void(0)" role="tab" tabindex="-1" aria-selected="false" aria-controls="slds-vertical-tabs-32" id="slds-vertical-tabs-1__nav">Tab 2</a></li>
+    <li class="slds-vertical-tabs__nav-item" title="Tab 3"
+      role="presentation"><a class="slds-vertical-tabs__link" href="javascript:void(0)" role="tab" tabindex="-1" aria-selected="false" aria-controls="slds-vertical-tabs-33" id="slds-vertical-tabs-2__nav">Tab 3</a></li>
+  </ul>
+  <div class="slds-vertical-tabs__content slds-show" id="slds-vertical-tabs-31" role="tabpanel" aria-labelledby="slds-vertical-tabs-0__nav">
+    <div class="slds-text-longform">
+      <h3 class="slds-text-heading_medium">333-111</h3>
+      <p>Content for Tab 31</p>
+      <p>Lorem ipsum dolor...</p>
+      <p>Lorem ipsum dolor...</p>
+    </div>
+  </div>
+  <div class="slds-vertical-tabs__content slds-hide" id="slds-vertical-tabs-32" role="tabpanel" aria-labelledby="slds-vertical-tabs-1__nav">
+    <div class="slds-text-longform">
+      <h3 class="slds-text-heading_medium">333-222</h3>
+      <p>Content for Tab 32</p>
+      <p>Lorem ipsum dolor...</p>
+      <p>Lorem ipsum dolor...</p>
+    </div>
+  </div>
+  <div class="slds-vertical-tabs__content slds-hide" id="slds-vertical-tabs-33" role="tabpanel" aria-labelledby="slds-vertical-tabs-2__nav">
+    <div class="slds-text-longform">
+      <h3 class="slds-text-heading_medium">333-333</h3>
+      <p>Content for Tab 33</p>
+      <p>Lorem ipsum dolor...</p>
+      <p>Lorem ipsum dolor...</p>
+    </div>
+  </div>
+</div>
+  </div>
+</div>
+
+
+<div style="background:rgb(255,255,255)">
+  <div class="slds-tabs_default">
+  <ul class="slds-tabs_default__nav" role="tablist">
+    <li class="slds-tabs_default__item slds-is-active" title="Item One" role="presentation" style="padding-right:25px;padding-left:25px;">
+      <a class="slds-tabs_default__link" href="javascript:void(0);" role="tab" tabindex="0" aria-selected="true" aria-controls="tab-default-1" id="tab-default-1__item">审批文档</a>
+    </li>
+  </ul>
+  <div id="tab-default-1" class="slds-tabs_default__content slds-show" role="tabpanel" aria-labelledby="tab-default-1__item">
+     <input type="file" class="slds-file-selector__input slds-assistive-text"  id="file-upload-input-01" aura:id="file" aria-labelledby="file-selector-primary-label file-selector-secondary-label"  onchange="{!c.test1 }" />
+        <label class="slds-file-selector__body" for="file-upload-input-01" id="file-selector-secondary-label">
+          <span class="slds-file-selector__button slds-button slds-button_brand">上传文件</span>
+        </label> 
+
+     <div style="margin-top:10px;">
+         <lightning:datatable data="{! v.mydata }" columns="{! v.mycolumns }" keyField="id" hideCheckboxColumn="true"  />
+     </div>
+  </div>
+</div>
+</div>
+
+</aura:component>

@@ -1,0 +1,19 @@
+<apex:page standardController="Registration__c" extensions="HelloWorld" showHeader="false">
+    <apex:form >
+    <apex:pageBlock title="人帅爱唱歌" id="block" >
+                <apex:messages />
+       
+     <!--  <apex:actionRegion >
+        <apex:inputText value="{!aa}" required="true" >
+         <apex:actionSupport action="{!pp}" reRender="block" event="onchange" />
+        </apex:inputText>
+           </apex:actionRegion>
+         <apex:actionRegion >
+        <apex:inputText value="{!bb}"  >
+            <apex:actionSupport action="{!pp}" reRender="block" event="onchange" />
+        </apex:inputText>
+        </apex:actionRegion>--> 
+        <apex:commandButton action="{!pp}"  value="woshishabi"  />
+    </apex:pageBlock>
+    </apex:form>
+</apex:page>

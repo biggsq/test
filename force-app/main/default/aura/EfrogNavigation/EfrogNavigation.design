@@ -1,0 +1,10 @@
+<design:component >
+	<design:attribute name="imageName"/>
+    <design:attribute name="Home"/>
+    <design:attribute name="jh"/>
+    <design:attribute name="jdiv"/>
+   <design:attribute name="New_Houses"  />
+<design:attribute name="Hand_Houses"  />
+<design:attribute name="Rent_Houses"  />
+<design:attribute name="Agents"  />
+</design:component>

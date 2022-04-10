@@ -1,0 +1,74 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global">
+<aura:handler name="init" action="{!c.doInit}" value="{!this}" />
+<ltng:require styles="{! $Resource.bootstrap + '/bootstrap-3.3.7-dist/css/bootstrap.css'}" 
+scripts="{!join(',', 
+$Resource.jquery , 
+$Resource.bootstrap + '/bootstrap-3.3.7-dist/js/bootstrap.js',$Resource.bootstrap + '/bootstrap-3.3.7-dist/js/bootstrap.min.js')
+}" afterScriptsLoaded="{!c.scriptsLoaded}"/>
+<aura:attribute name="newHouse" type="New_Houses__c" />
+<aura:attribute name="houseLayout" type="String" />
+<aura:attribute name="hasFeature" type="String" />
+<aura:attribute name="size" type="String" />
+<aura:attribute name="features" type="String[]" />
+<aura:attribute name="isSale" type="String" />
+<style>
+.type {
+	color: #6783ae;
+	background: #f0f4f8;
+}
+.onsale {
+	color: #799374;
+	background: #f2f6ed;
+}
+.forsale {
+	color: #7d745b;
+	background: #f8f3e9;
+}
+.outsale {
+	color: #a93258;
+	background: rgba(194, 57, 52, 0.1);
+}
+.tag {
+	display: inline-block;
+	color: #999;
+	padding: 0 4px;
+	text-align: center;
+	border: 1px solid #ccc;
+	margin-right: 6px;
+	vertical-align: top;
+	border-radius: 2px;
+}
+.price{
+    padding: 2px 5px;
+    color: #e54b00;
+    font-family: Tahoma,Arial,"Helvetica Neue",Helvetica,sans-serif;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+</style>
+<div class="col-xs-12 col-sm-12 col-md-12" style="border:1px solid #dddbda;border-radius:5px; padding:15px; margin-top:20px;margin-bottom: 20px;">
+	<a  id="{!v.newHouse.Id}" href="javascript:void(0);" class=" slds-text-link_reset"  onclick="{!c.detail}">
+		<div id="{!v.newHouse.Id}" class="col-sm-3 col-xs-3 col-md-3" align="center">
+			 <img id="{!v.newHouse.Id}" src="{! $Resource.image+'/image/'+v.newHouse.image__c}" style="margin-top:10px;width:180px;height: 135px "  />
+		</div>
+		<div class="col-sm-5 col-xs-5 col-md-6 " style="padding-top: 10px" id="{!v.newHouse.Id}">
+			<p style="font-size:20px" id="{!v.newHouse.Id}"><b id="{!v.newHouse.Id}">{!v.newHouse.name__c}</b></p>
+			<p id="{!v.newHouse.Id}">[&nbsp;{!v.newHouse.area__c}&nbsp;]&nbsp;{!v.newHouse.address__c}</p> 
+			<p id="{!v.newHouse.Id}">户型&nbsp;:&nbsp;{!v.newHouse.houseLayout__c}&nbsp;&nbsp;&nbsp;建筑平均面积&nbsp;:&nbsp;{!v.size}</p>  
+			<div class="" id="{!v.newHouse.Id}">
+			<span class="{!v.isSale}" id="{!v.newHouse.Id}">{!v.newHouse.status__c}</span>&nbsp;&nbsp;&nbsp;
+			<span class="type" id="{!v.newHouse.Id}">{!v.newHouse.type__c}</span>&nbsp;&nbsp;&nbsp;
+			<aura:if isTrue="{!v.hasFeature}">
+			<aura:iteration items="{!v.features}" var="fea">
+			<span class="tag" id="{!v.newHouse.Id}">{!fea}</span>
+			</aura:iteration> 
+		   </aura:if>
+			</div> 
+		</div>
+		<div class="col-sm-4 col-xs-4 col-md-3" id="{!v.newHouse.Id}" style="margin-top:30px" align="right">
+			<p id="{!v.newHouse.Id}">均价:<span class="price" id="{!v.newHouse.Id}">{!v.newHouse.price__c}</span>元/㎡</p>
+		</div>		
+	</a>
+</div>
+</aura:component>

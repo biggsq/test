@@ -1,0 +1,26 @@
+({
+	/*$(window).scroll : function(component, event, helper) {
+		if($(document).scrollTop()>20){
+			$(".nav").addClass("float-header");
+		}else{
+			$(".nav").removeClass("float-header");
+		}
+	},*/
+	doInit:function(component,event,helper){
+	},
+	scriptsLoaded:function(component,event,helper){
+        if($(document).scrollTop()>60){
+			$("nav").addClass("float-header-in");
+		}
+		$(window).scroll(function(){
+           if($(document).scrollTop()>60){
+			$("nav").addClass("float-header-in");
+		}else{
+			$("nav").removeClass("float-header-in");
+		}
+			}) 
+		},
+    test:function(component,event,helper){
+        alert("ok");
+    } 
+})

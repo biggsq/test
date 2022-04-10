@@ -1,0 +1,236 @@
+<aura:component controller="HelloWorld" implements="forceCommunity:availableForAllPageTypes,force:appHostable" ><!--implements="flexipage:availableForRecordHome,force:hasRecordId" access="global" implements="force:appHostable" lightning tab标签  implements="flexipage:availableForAllPageTypes" access="global" lightning page标签 ???-->
+<aura:handler name="init" action="{!c.doInit}" value="{!this}"/>
+<aura:attribute name="newExpense" type="expense__c"
+default="{ 'sobjectType': 'expense__c',
+'Name': '',
+'Amount__c': 0,
+'Client__c': '',
+'Date__c': '',
+'Reimbursed__c': false }"/>
+<aura:attribute name="sex" type="String[]" default="男,女"/>
+<aura:attribute name="newStudent" type="Student__c" default="{'Name':'','sex__c':''}" />
+<aura:attribute name="expenses" type="expense__c[]"/>
+<aura:attribute name="message" type="String"/>
+<aura:attribute name="mydata" type="expense__c[]"/>
+<aura:attribute name="mycolumns" type="List"/>
+<aura:attribute name="students" type="lightningstudent[]"/>
+
+<aura:attribute name="page" type="Integer" default="1"/>
+<aura:attribute name="totalpage" type="Integer" />
+<aura:attribute name="spage" type="Integer" default="1"/>
+<aura:attribute name="stotalpage" type="Integer" />
+<aura:attribute name="stotalpages" type="Integer[]" />
+
+<aura:attribute name="checked" type="String" default=""/>
+<aura:attribute name="isStuOpen" type="boolean" default="false"/>
+<aura:attribute name="isOpen" type="boolean" default="false"/>
+
+<lightning:card iconName="standard:contact" title="{! 'Contact List for ' + v.Account.Name}">
+    <!-- Contact list goes here -->
+</lightning:card>
+<!-- PAGE HEADER -->
+<lightning:layout class="slds-page-header slds-page-header--object-home">
+<lightning:layoutItem >
+<lightning:icon iconName="standard:scan_card" alternativeText="My Expenses"/>
+</lightning:layoutItem>
+<lightning:layoutItem padding="horizontal-small">
+<div class="page-section page-header">
+    <h1 class="slds-text-heading--label">Expenses</h1>
+    <h2 class="slds-text-heading--medium">My Expenses</h2>
+</div>
+</lightning:layoutItem>
+</lightning:layout>
+<!-- / PAGE HEADER -->
+
+<!-- NEW EXPENSE FORM -->
+<lightning:layout >
+<lightning:layoutItem padding="around-small" size="6">
+<input id="aa" />{!v.message}
+
+<div aria-labelledby="newexpenseform">
+    <!-- BOXED AREA -->
+    <fieldset class="slds-box slds-theme--default slds-container--small">
+
+        <legend id="newexpenseform" class="slds-text-heading--small 
+        slds-p-vertical--medium">
+        Add Expense
+    </legend>
+
+    <!-- CREATE NEW EXPENSE FORM -->
+    <form class="slds-form--stacked">          
+        <lightning:input aura:id="expenseform" label="Expense Name"
+        name="expensename"
+        value="{!v.newExpense.Name}"
+        required="true" messageWhenValueMissing="Did you forget me?"/> 
+        <lightning:input type="number" aura:id="expenseform" label="Amount"
+        name="expenseamount"
+        min="0.1"
+        formatter="currency"
+        step="0.01"
+        value="{!v.newExpense.Amount__c}"
+        messageWhenRangeUnderflow="Enter an amount that's at least $0.10."/>
+        <lightning:input aura:id="expenseform" label="Client" 
+        name="expenseclient"
+        value="{!v.newExpense.Client__c}"
+        placeholder="ABC Co."/>
+        <lightning:input type="date" aura:id="expenseform" label="Expense Date"
+        name="expensedate"
+        value="{!v.newExpense.Date__c}"/>
+        <lightning:input type="checkbox" aura:id="expenseform" label="Reimbursed?"  
+        name="expreimbursed"
+        checked="{!v.newExpense.Reimbursed__c}"/>
+        <lightning:button label="Create Expense" 
+        class="slds-m-top--medium"
+        variant="brand"
+        onclick="{!c.clickCreate}"/>
+    </form>
+    <!-- / CREATE NEW EXPENSE FORM -->
+
+</fieldset>
+<!-- / BOXED AREA -->
+
+</div>
+
+</lightning:layoutItem>
+</lightning:layout>
+<lightning:layout horizontalAlign="left" multipleRows="true">
+<aura:iteration items="{!v.expenses}" var="exp">
+<lightning:layoutItem padding="around-small" size="3">
+<c:hellolightning2 expense="{!exp}"/>
+</lightning:layoutItem>
+</aura:iteration>
+</lightning:layout>
+
+<div class=" slds-size--2-of-8">
+<div class="slds-form-element slds-form-element_small slds-form-element_edit">
+    <span class="slds-form-element__label">Input Label</span>
+    <div class="slds-form-element__control">
+      <span class="slds-form-element__static slds-border_bottom">Read Only</span>
+    </div>
+  </div>
+</div>
+
+<div class=" slds-size--7-of-8">
+ <!--table-->
+ <p style="font-size: 24px">我是datatable标签</p>
+
+ <lightning:datatable data="{! v.mydata }" 
+ columns="{! v.mycolumns }" 
+ keyField="id"  
+ onrowselection="{! c.getSelectedName }" minColumnWidth="1px"   /><!-- hideCheckboxColumn="true" 隐藏checkbox -->
+ <center>
+ <lightning:button label="First" onclick="{!c.first}"  />
+ <lightning:button label="Previous" onclick="{!c.previous}" />
+ {!v.page}  / {!v.totalpage}
+ <lightning:button label="Next" onclick="{!c.next}" /> 
+ <lightning:button label="Last" onclick="{!c.last}" />  
+</center>
+</div>
+
+
+
+<div class=" slds-size--7-of-8">
+<p style="font-size: 24px">我是table标签</p>
+<div align="right" style="margin-right: 50px;margin-bottom:10px">
+    <lightning:button label="Add Student"  onclick="{!c.openStuModel}" />
+</div>
+<aura:if isTrue="{!v.isStuOpen}">
+
+<!--###### MODAL BOX Start From Here ######--> 
+<div role="dialog" tabindex="-1" aria-labelledby="header99" class="slds-modal slds-fade-in-open ">
+    <div class="slds-modal__container">
+      <!-- ###### MODAL BOX HEADER Part Start From Here ######-->
+      <div class="slds-modal__header">
+        <button class="slds-button slds-modal__close slds-button--icon-inverse" title="Close" onclick="{!c.closeStuModel}">
+            X
+            <span class="slds-assistive-text">Close</span>
+        </button>
+        <h2 id="header99" class="slds-text-heading--medium">Add Student</h2>
+    </div>
+    <!--###### MODAL BOX BODY Part Start From Here ######-->
+     <div class="slds-modal__content slds-p-around--medium  ">
+        <div aria-labelledby="newstudentform ">
+            <!-- BOXED AREA -->
+            <!-- CREATE NEW EXPENSE FORM --> <!--slds-grid slds-wrap 让两个input在一行-->
+            <form class="slds-form--stacked slds-grid slds-wrap">          
+                <lightning:input aura:id="studentform" label="Student Name" class="slds-size--1-of-2 slds-p-horizontal_x-small"
+                name="studentname"
+                value="{!v.newStudent.Name}"
+                required="true" messageWhenValueMissing="Did you forget me?"/> 
+                <lightning:select name="select" aura:id="picksex" label="Sex" class="slds-size--1-of-2 slds-p-horizontal_x-small" required="true" messageWhenValueMissing="Did you forget to select something?">
+                <option value="">-- None --</option>
+                <aura:iteration items="{!v.sex}" var="sex">
+                <option value="{!sex}" text="{!sex}" selected="{!sex==v.newStudent.sex__c}"></option>
+            </aura:iteration>
+        </lightning:select>
+    </form>
+</div>
+
+</div>
+<div class="slds-modal__footer">
+    <button class="slds-button slds-button--neutral" onclick="{!c.closeStuModel}" >Cancel</button>
+    <button class="slds-button slds-button--brand" onclick="{!c.CreateStu}">Save</button>
+</div>      
+</div>
+</div>
+<div class="slds-backdrop slds-backdrop--open"></div>
+<!--###### MODAL BOX Part END Here ######-->   
+</aura:if>
+<table class="slds-table slds-table_bordered slds-table_cell-buffer">
+  <thead>
+    <tr class="slds-text-title_caps">
+        <th scope="col" width="25px">
+            <div class="slds-truncate" title="c"></div>
+        </th>
+        <th scope="col">
+            <div class="slds-truncate" title="Id">Id</div>
+        </th>
+        <th scope="col">
+            <div class="slds-truncate" title="Name" >Name</div>
+        </th>
+        <th scope="col">
+            <div class="slds-truncate" title="Sex">Sex</div>
+        </th>
+    </tr>
+</thead>
+<tbody>
+    <aura:iteration items="{!v.students}" var="stu">
+    <tr>
+       <td data-label="c" >
+        <div class="slds-truncate" title="{!stu.checked}">
+         <span class="slds-checkbox">
+          <input type="checkbox" name="options" data-value="{!stu.student.sid__c+'-'+stu.student.Name+'-'+stu.student.sex__c}" id="{!stu.student.sid__c}"  checked="{!stu.checked}" value="{!stu.student.sid__c}" onclick="{!c.checked1}"/>
+          <label class="slds-checkbox__label" for="{!stu.student.sid__c}">
+            <span class="slds-checkbox_faux"></span>
+        </label>
+    </span>
+</div>
+</td>
+<td  data-label="Id">
+    <div class="slds-truncate" title="{!stu.student.sid__c}">{!stu.student.sid__c}</div>
+</td>
+<td data-label="Name">
+    <div class="slds-truncate" title="{!stu.student.Name}" >{!stu.student.Name}</div>
+</td>
+<td data-label="Sex">
+    <div class="slds-truncate" title="{!stu.student.sex__c}">{!stu.student.sex__c}</div>
+</td>
+</tr>
+</aura:iteration>
+</tbody>
+</table>
+<div align="center">
+    {!v.spage}  / {!v.stotalpage} 
+</div>
+<center>
+<lightning:button label="First" onclick="{!c.sfirst}"  />
+<lightning:button label="Previous" onclick="{!c.sprevious}" />
+<aura:iteration items="{!v.stotalpages}" var="ss">
+<lightning:button label="{!ss}" disabled="{!ss==v.spage}" onclick="{!c.sonepage}" />
+</aura:iteration>
+<lightning:button label="Next" onclick="{!c.snext}" /> 
+<lightning:button label="Last" onclick="{!c.slast}" />
+</center>
+</div>
+
+</aura:component>

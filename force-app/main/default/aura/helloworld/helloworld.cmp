@@ -1,0 +1,40 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes,force:appHostable,flexipage:availableForRecordHome">
+
+    <aura:attribute name="messages" type="List"
+        default="['You look nice today.',
+            'Great weather we\'re having.',
+            'How are you?']"/>
+    <aura:attribute name="gsq" type="Aura.component[]"/>
+
+
+    <h1>Hello Playground</h1>
+
+    <p>Silly fun with attributes and expressions.</p>
+
+
+    <h2>List Items</h2>
+
+    <p><c:hellomessage message="{!v.messages[0]}"/></p>
+    <p><c:hellomessage message="{!v.messages[1]}"/></p>
+    <p><c:hellomessage message="{!v.messages[2]}"/></p>
+
+
+    <h2>List Iteration</h2>
+
+    <aura:iteration items="{!v.messages}" var="msg">
+        <p><c:hellomessage message="{!msg}"/></p>
+    </aura:iteration>
+
+
+    <h2>Conditional Expressions and Global Value Providers</h2>
+
+    <aura:if isTrue="{!$Browser.isIPhone}">
+        <p><c:hellomessage message="{!v.messages[0]}"/></p>
+    <aura:set attribute="else">
+        <p><c:hellomessage message="{!v.messages[1]}"/></p>
+        </aura:set>
+    </aura:if>
+    <div >
+            {! v.gsq }
+    </div>
+</aura:component>

@@ -1,0 +1,8 @@
+<aura:component implements="forceCommunity:themeLayout" >
+ <aura:attribute name="topNavigator" type="Aura.component[]"/>
+ <aura:attribute name="topNavigator2" type="Aura.component[]"/>
+<div>
+	{!v.body}
+	</div>
+<c:EfrogHomeLayout />
+</aura:component>

@@ -1,0 +1,16 @@
+<aura:component implements="forceCommunity:layout">
+	<aura:attribute name="topNavigator" type="Aura.component[]"/>
+	<aura:attribute name="mybody" type="Aura.component[]"/>
+    <aura:attribute name="gsq" type="Aura.component[]"/>
+	<!-- <div class="slds-grid">
+		<div class="slds-col slds-size_1-of-4">
+			{! v.topNavigator}
+		</div>
+		<div class="slds-col slds-size_3-of-4">
+			{! v.mybody }
+		</div>
+	</div> -->
+	<div >
+			{! v.gsq }
+	</div>
+</aura:component>

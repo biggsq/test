@@ -1,0 +1,156 @@
+<apex:page standardController="Registration__c" extensions="registrationController"  >
+    <apex:sectionHeader title="Registration Wizard" subtitle="{!title}" /> 
+    <c:loading />
+    <apex:pageBlock id="block">    
+        <apex:form id="formid">
+            <apex:pageMessages />
+            <div style="margin-bottom:5px">
+                <b>Registration Information</b>
+                <apex:commandButton value="Save" action="{!add}" style="margin-left:200px" onclick="add()" />
+                <apex:commandButton action="{!docan}" value="Cancel" immediate="true" >                    
+                </apex:commandButton>
+            </div>
+            <apex:pageBlockSection title="Registration Details" columns="2" id="thesection">                       
+                <apex:inputField value="{!Registration.Player__c}" id="player"  />
+                <apex:inputField value="{!Registration.Status__c}" id="status" /> 
+                <apex:inputField value="{!Registration.Date__c}"  /> 
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Tournament Chart" columns="1" id="thesection4" >               
+                <apex:chart height="300" width="800" data="{!data}" resizable="true">
+                    <apex:axis type="Numeric" position="left" fields="data"
+                               title="Entry Fees" grid="true"/>
+                    <apex:axis type="Category" position="bottom" fields="name"
+                               title="Date" />
+                    <apex:barSeries orientation="vertical" axis="left"
+                                    xField="name" yField="data">
+                    </apex:barSeries>
+                </apex:chart>
+                <div class="message infoM3" role="alert" style='{!divinfo}'>
+                    <table border="0" cellpadding="0" cellspacing="0" class="messageTable" style="padding:0px;margin:0px;">
+                        <tr valign="top">
+                            <td class="messageCell">
+                                <div id="j_id0:block:formid:j_id1:j_id2:j_id3:0:j_id4:j_id5:j_id7" class="messageText">
+                                    <span id="j_id0:block:formid:j_id1:j_id2:j_id3:0:j_id4:j_id5:j_id8">
+                                    </span>No Tournaments have been entered yet.<br />
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </apex:pageBlockSection>
+            <div style="display:none;">
+            <apex:pageBlockSection title="qwe" columns="1" id="thesection3" > 
+            </apex:pageBlockSection>
+            </div>
+            <apex:pageBlockSection title="Tournaments" columns="1" id="thesection2">                 
+                <apex:actionRegion immediate="true">
+                <div style="margin-left: 100px">
+                        <apex:selectList multiselect="false" size="1" value="{!game}"
+                                 label="game" >
+                           <apex:actionSupport event="onchange" action="{! selecttype }"
+                                               reRender="thesection2,thesection4"
+                                               status="chartStatus"/>
+                           <apex:selectOptions value="{!typeNames}">
+                           </apex:selectOptions>
+                       </apex:selectList>
+                       <apex:inputHidden value="{!checkinfo}" id="scheckinfo"/>
+                       <apex:inputHidden value="{!pageNumber}" />
+                       <apex:inputHidden value="{!divinfo}" />   
+                   </div>
+                   </apex:actionRegion>
+                <apex:pageBlockTable id="tournamenttable" value="{!tlist}" var="tou">
+                    <apex:column width="50px">
+                        <apex:inputCheckbox value="{!tou.checked}" onchange="check('{!tou.tournament.id}')" />
+                    </apex:column>
+                    <apex:column headervalue="Tournament Name">
+                        <apex:commandLink value="{!tou.tournament.name}" action="{!tnamelink}" immediate="true" >
+                            <apex:param name="tid" value="{!tou.tournament.id}" assignTo="{!paramtid}"></apex:param>
+                        </apex:commandLink>
+                    </apex:column>
+                    <apex:column headervalue="Date">
+                        <apex:outputText value="{0,date,M/d/yyyy}">
+                            <apex:param value="{!tou.tournament.Date__c}"/>
+                        </apex:outputText>
+                    </apex:column>
+                    <apex:column headervalue="Entry Fee">
+                        <apex:outputText value="{0,number,##,###0.00}">
+                            <apex:param value="{!tou.tournament.Entry_Fee__c}"/>
+                        </apex:outputText>
+                    </apex:column>
+                    <apex:column headervalue="Game">
+                        <apex:outputText value="{!tou.tournament.Game__c}"/>
+                    </apex:column> 
+                </apex:pageBlockTable>
+                  <apex:actionRegion >
+                  <div  align="center">
+                        <apex:panelGrid columns="5" >                         
+                            <apex:commandButton value="|<First" disabled="{!!hasPrevious}" immediate="true" status="Loading" reRender="thesection3" ><!-- status：compent里actionStatus的id，rerender刷新区域一定要 -->
+                             <apex:actionSupport event="onclick" action="{!first}"
+                                               reRender="thesection2,thesection4"
+                                               status="chartStatus"/>   
+                             </apex:commandButton>
+                            <apex:commandButton value="Previous"   disabled="{!!hasPrevious}" immediate="true"  status="Loading" reRender="thesection3">
+                             <apex:actionSupport event="onclick" action="{!previous}"
+                                               reRender="thesection2,thesection4"
+                                               status="chartStatus"/>      
+                        </apex:commandButton>
+                            <p>page {!pageNumber} of {!allpage}</p>
+                            <apex:commandButton value="Next"  disabled="{!!hasNext}" immediate="true" status="Loading" reRender="thesection3" >
+                            <apex:actionSupport event="onclick" action="{!next}"
+                                               reRender="thesection2,thesection4"
+                                               status="chartStatus"/> 
+                        </apex:commandButton>
+                            <apex:commandButton value="Last>|"  disabled="{!!hasNext}" immediate="true" status="Loading" reRender="thesection3" >
+                            <apex:actionSupport event="onclick" action="{!last}"
+                                               reRender="thesection2,thesection4"
+                                               status="chartStatus"/> 
+                        </apex:commandButton>
+                            <apex:actionFunction action="{!selecttype}" name="xx" />
+                        <apex:inputHidden value="{!checkinfo}" id="checkinfo"/>
+                        <apex:inputHidden value="{!pageNumber}" />                 
+                          <!-- <button onclick="b()" type="button">aa</button>   -->
+                        </apex:panelGrid>
+                    </div>
+                </apex:actionRegion>  
+            </apex:pageBlockSection>                         
+        </apex:form>
+    </apex:pageBlock>           
+    <script type="text/javascript">
+    var a=document.getElementById("{!$Component.block.formid.thesection2.checkinfo}").value;
+    var player;
+    //设置页面初始化焦点
+    function setFocusOnLoad() {/*document.getElementById("{!$Component.block.formid.thesection.status}").focus();*/}
+    function check(id){
+        if(a.indexOf(id)<0){  
+            a=a+"&&"+id;
+        }
+        else{          
+            a=a.replace("&&"+id,"");
+        }
+        document.getElementById("{!$Component.block.formid.thesection2.checkinfo}").value=a;
+        document.getElementById("{!$Component.block.formid.thesection2.scheckinfo}").value=a;
+        // window.location.href="//c.ap5.visual.force.com/apex/registration?id=a077F000002JLqI&info="+a;
+    }
+    function b() {
+        var d= document.getElementById("{!$Component.block.formid.thesection.checkinfo}").value;
+        alert(d);
+        //document.getElementById("{!$Component.formid.block.thesection.checkinfo}").value='pp';              
+    }
+    function add(){
+         var playerinfo= document.getElementById("{!$Component.block.formid.thesection.player}").value;
+    }
+    /*function check(id){      	 
+	        Visualforce.remoting.Manager.invokeAction(
+	            '{!$RemoteAction.registrationController.check}',
+	            id,
+	            function(result, event){
+	                if (event.status) {	
+	                } else if (event.type === 'exception') {                   
+	                } else {	                   
+	                }
+	            },
+	            {escape: true}
+	        );} 
+*/
+    </script>
+</apex:page>

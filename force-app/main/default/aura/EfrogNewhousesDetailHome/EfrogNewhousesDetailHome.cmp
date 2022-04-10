@@ -1,0 +1,154 @@
+<aura:component controller="ENewController" implements="forceCommunity:availableForAllPageTypes" access="global">
+<ltng:require styles="{!join(',', 
+$Resource.bootstrap + '/bootstrap-3.3.7-dist/css/bootstrap.css',$Resource.star + '/bootstrap-star-rating-master/css/star-rating.min.css')
+}" 
+scripts="{!join(',', 
+$Resource.jquery , 
+$Resource.bootstrap + '/bootstrap-3.3.7-dist/js/bootstrap.js',$Resource.bootstrap + '/bootstrap-3.3.7-dist/js/bootstrap.min.js',$Resource.star + '/bootstrap-star-rating-master/js/star-rating.min.js')
+}" />
+<!-- ,$Resource.bootstrap + '/bootstrap-3.3.7-dist/js/jquery.star-rating-svg.js'
+,$Resource.bootstrap + '/bootstrap-3.3.7-dist/css/star-rating-svg.css' -->
+<aura:handler name="init" action="{!c.doInit}" value="{!this}" />
+<aura:attribute name="newHouse" type="New_Houses__c" />
+<aura:attribute name="size" type="String" />
+<style>
+.panel-success > .panel-heading {
+    color: #3c763d;
+    background-color: #bdeaab;
+    border-color: #bdeaab;
+}
+.nav-p-right{
+font-family: Roboto-Medium; 
+font-size:15px;
+font-weight: 700;
+}
+#a-no-background a:hover {
+    background-color: rgba(0,0,0,0);
+    color:black; 
+}
+.navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
+    background-color: #286090;
+    border-color: #204d74;
+}
+.junjia {
+    font-weight: bold;
+    color: #f76e64;
+}
+.state-div .state {
+    display: inline-block;
+    font-size: 12px;
+    border-bottom-right-radius: 6px;
+    padding: 0 8px;
+    color: #fff;
+    background-color: #666666;
+    line-height: 30px;
+    height: 30px;
+    margin-left: -30px;
+}
+.p-info{
+	padding: 17px 0;
+    border-bottom: 1px solid #ededed;
+    font-size: 14px;
+    font-weight: bold;
+}
+</style>
+<div class="row">
+<nav  class="navbar   navbar-without-shadow float-header navbar-default " role="navigation" style="padding-top: 15px;margin-bottom: 0px">
+    <div class="container">
+      <div class="navbar-header ">
+	      <button type="button" class="navbar-toggle collapsed " data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+	        <span class="sr-only">Toggle navigation</span>
+	        <span class="icon-bar"></span>
+	        <span class="icon-bar"></span>
+	        <span class="icon-bar"></span>
+	      </button>
+          <div class="navbar-brand" style="padding:0px 15px;margin-bottom:15px">
+              <img src="{!$Resource.testb}" class="navbar-brand__img" alt="" style="width:100px"/>            
+          </div>
+        </div>
+      <div class=" navbar-collapse collapse " id="navbar">
+        <ul class="nav navbar-nav navbar-right" >
+          <li id="a-no-background"><a class="nav-p-right" data-track-location='header' href="../c/Efrog.app" style="">Home</a></li>
+          <li id="a-no-background"><a class="nav-p-right " data-track-location='header' href="../c/EfrogNewhouses.app" style="color:black">New Houses</a></li>
+          <li id="a-no-background"><a class="nav-p-right" data-track-location='header' href="" style="">Hand Houses</a></li>
+          <li id="a-no-background"><a class="nav-p-right" data-track-location='header' href="" style="">Rent Houses</a></li>
+          <li id="a-no-background"><a class="nav-p-right" data-track-location='header' href="" style="">Agents</a></li>
+          <li style="padding-top:10px; margin-left: 10px"><a  class="btn btn-primary btn-lg" href="#" role="button" style="padding: 5px 25px; color: white" >Login</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</div>
+<div class="row" >
+  <div class="col-xs-12 col-sm-12" style="{!'background: url('+$Resource.image + '/image/'+v.newHouse.image__c+') ;background-size:100% 100%;'}">
+    <div class="row">
+      <div class="col-xs-12 col-sm-12" style="background-color: rgba(0,0,0,0.8);">
+      	<div class="row">
+           <div class="container " >
+           	<div class="col-xs-12 col-sm-12" style="{!'background: url('+$Resource.image + '/image/'+v.newHouse.image__c+')no-repeat; background-size:100% 100% ;margin:30px auto;'}" >
+           		<div class="row">
+           			<div class="col-md-4 col-sm-6 col-sx-8" style="margin:20px 30px" >
+           				<div class="col-md-12" style="background-color: #333333;  padding:0px 30px 30px 30px;">
+           			  <div class="state-div" >
+           					<span class="state">{!v.newHouse.status__c}</span>
+           				</div>
+          					<h3 style="color: white"><b>{!v.newHouse.name__c}</b></h3>
+          					<span style="color: white">均价</span>&nbsp;<span class="junjia" style="font-size: 22px">{!v.newHouse.price__c}</span>&nbsp;<span class="junjia">元/㎡</span>
+           				</div>
+           				<div class="col-md-12" style="background-color: white; ">
+          					<p class="p-info"><span class="glyphicon glyphicon-th-list" aria-hidden="true">&nbsp;</span><b>物业类型：{!v.newHouse.type__c}</b></p>
+          					<p class="p-info"><span class="glyphicon glyphicon-map-marker" aria-hidden="true">&nbsp;</span><b>项目地址：{!v.newHouse.area__c}&nbsp;{!v.newHouse.address__c}</b></p>
+          					<p class="p-info"><span class="glyphicon glyphicon-time" aria-hidden="true">&nbsp;</span><b>交房时间：{!v.newHouse.payDate__c}</b></p>
+          					<button class="btn btn-danger col-md-12" style="font-size: 18px; margin-top:10px;margin-bottom: 30px"><span class="glyphicon glyphicon-earphone" aria-hidden="true">&nbsp;</span>4008-123-123</button>
+           				</div>
+           			</div>
+           		</div>
+           	   </div>
+           </div>
+       </div>
+      </div>
+    </div>
+  </div>
+</div>  
+<div class="row">
+	<div class="container">
+		<div class="panel panel-success" style="margin-top:20px">
+			<div class="panel-heading">
+				<h3 class="panel-title">楼盘动态</h3>
+			</div>
+			<div class="panel-body">
+        <p style="font-size:20px;font-weight: 900">楼盘情况：{!v.newHouse.status__c}</p>
+				<p><b>工程进度：</b>{!v.newHouse.process__c}</p>
+			</div>
+		</div>
+		<div class="panel panel-success" style="margin-top:20px">
+			<div class="panel-heading">
+				<h3 class="panel-title">户型介绍</h3>
+			</div>
+			<div class="panel-body">
+				<p style="font-size:20px;font-weight: 900">{!v.newHouse.houseLayout__c}&nbsp;&nbsp;建面：{!v.size}</p>
+				<p><b>开发商：</b>{!v.newHouse.developer__c}</p>
+        <p><b>预售许可证：</b>{!v.newHouse.licence__c}</p>
+			</div>
+		</div>
+		<div class="panel panel-success" style="margin-top:20px">
+			<div class="panel-heading">
+				<h3 class="panel-title">楼盘相册</h3>
+			</div>
+			<div class="panel-body">
+				<p>...</p>
+				<p>...</p>
+				<p>...</p>
+			</div>
+		</div>
+		<div class="panel panel-success" style="margin-top:20px">
+			<div class="panel-heading">
+				<h3 class="panel-title">用户点评</h3>
+			</div>
+			<div class="panel-body">
+				综合评分：暂无评分
+			</div>
+		</div>
+	</div>
+</div>
+</aura:component>
